@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASU Engineering Content - Max Boissiere</title>
+    <meta name="description" content="Educational content creation for ASU Engineering programs.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 
+                (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
+    <link rel="stylesheet" href="../style.css">
+    <script src="../header-loader.js"></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+    
+    <main class="project-page">
+        
+        <div class="project-hero">
+            <h1>ASU Engineering Content</h1>
+            
+            <div class="videos-container">
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/wf8y2S0nRQE" 
+                            title="ASU Engineering Content"
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            allowfullscreen
+                            loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div class="project-details">
+            <div class="detail-section">
+                <h3>About</h3>
+                <p>Created educational content for Arizona State University Engineering programs, focusing on clear communication of complex technical concepts.</p>
+            </div>
+            
+            <div class="detail-section">
+                <h3>Role</h3>
+                <p>Editor</p>
+            </div>
+            
+            <div class="detail-section">
+                <h3>Tools</h3>
+                <ul>
+                    <li>Premiere - Edit</li>
+                    <li>Davinci Resolve - Color</li>
+                    <li>After Effects/Fusion - Motion Graphics</li>
+                    <li>Photoshop</li>
+                    <li>Ableton Live - Sound Mix</li>
+                </ul>
+            </div>
+                        <div class="detail-section">
+                <h3>Deliverables</h3>
+                <ul>
+                    <li>Multi-Camera Event Coverage - 40 mins to 1h30</li>
+                    <li>Individual Speakers Videos - 20 to 40 mins</li>
+                    <li>Subtitled versions, American Sign Language Versions</li>
+                    <li>Custom graphics</li>
+                    <li>Fixing footage/audio issues</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="stills-gallery">
+            <h3>Stills</h3>
+            <div class="stills-grid">
+                <div class="still-item">
+                    <img src="../gallery/sfl2.png" alt="Educational content" loading="lazy">
+                </div>
+                <div class="still-item">
+                    <img src="../gallery/sfl3.png" alt="Technical demonstrations" loading="lazy">
+                </div>
+                <div class="still-item">
+                    <img src="../gallery/sfl4.png" alt="Engineering projects" loading="lazy">
+                </div>
+            </div>
+        </div>
+        
+        <a href="../index.html" class="back-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Back to Portfolio
+        </a>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Max Boissiere. All rights reserved.</p>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dye Simulator DCTL Blog - Max Boissiere</title>
+    <meta name="description" content="Technical blog post about creating the Dye Simulator DCTL and simulating 500T film stock for digital cinema.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 
+                (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
+    <link rel="stylesheet" href="../style.css">
+    <script src="../header-loader.js"></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+    
+    <main class="blog-page">
+        <div class="project-hero">
+            <h1>Simulating 500T Dye Density in Resolve Using DCTLs</h1>
+            <p>Technical exploration of Kodak VISION3 500T film emulation and digital color science</p>
+            <div class="blog-meta">
+                <span class="blog-date">June 29, 2025</span>
+                <span class="blog-divider" aria-hidden="true">|</span>
+                <span class="blog-author">Max Boissiere</span>
+            </div>
+        </div>
+        
+        <article class="blog-content">
+            <div class="blog-intro">
+                <p>I've been experimenting with recreating <strong>Kodak VISION3 500T (5219)</strong> in DaVinci Resolve, using <a href="https://github.com/thatcherfreeman/utility-dctls/blob/main/Effects/Dye%20Simulator.dctl" target="_blank" rel="noopener noreferrer">Thatcher Freeman's dye simulator DCTL</a>. My goal was simple: copy the curves from Kodak's own whitepapers and see if I could get an accurate film look. Spoiler alert — it wasn't that simple.</p>
+            </div>
+
+            <section class="blog-section">
+                <h2>The Problem: Too Yellow, Too Green</h2>
+                <p>I started by plugging in the standard dye curves from Kodak's technical documentation for various stocks. I tried to be as accurate as possible but I couldn't shake the yellow-green cast it generated.</p>
+                
+                <div class="workflow-steps">
+                    <div class="workflow-step">
+                        <h3>Node 1 – Primary Dye Curves (First Attempt)</h3>
+                        <p>Started with Kodak's published spectral peaks:</p>
+                        <div class="spec-list">
+                            <div class="spec-item">
+                                <span class="spec-label">Yellow:</span>
+                                <span class="spec-value">~445nm</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Magenta:</span>
+                                <span class="spec-value">~540nm</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Cyan:</span>
+                                <span class="spec-value">~685nm</span>
+                            </div>
+                        </div>
+                        <div class="still-item" style="margin: 2rem 0;">
+                            <img src="../gallery/kodak1.png" alt="Kodak whitepaper showing spectral dye density curves">
+                        </div>
+                        <p class="workflow-note">Keep in mind Blue inverted is Yellow, Green is Magenta, and Red is Cyan.</p>
+                    </div>
+
+                    <div class="workflow-step">
+                        <h3>The Solution: Secondary Cyan Spike</h3>
+                        <p>Digging deeper into the spectral charts, I noticed something I had missed — there's a <strong>secondary absorption spike around 395nm</strong> in the cyan dye. When I added this as a separate node:</p>
+                        <ul class="workflow-list">
+                            <li>The yellow-green cast had a control parameter</li>
+                            <li>During daylight shadows exhibit a "realness" quality with the cyan</li>
+                        </ul>
+                        <p class="workflow-note">This tiny spike in the UV range was the missing piece that took me too long to figure out.</p>
+                    </div>
+
+                    <div class="workflow-step">
+                        <h3>Node 3 – Inversion</h3>
+                        <p>A basic <code class="inline-code">1 - X</code> invert node to flip the simulated dye densities back into positive space, mimicking scanned negative film.</p>
+                    </div>
+                </div>
+            </section>
+
+             <div class="stills-gallery">
+            <h3>DCTL Setup & Results</h3>
+            <div class="stills-grid">
+                <div class="still-item">
+                    <img src="../gallery/dctl1.png" alt="Primary dye curves DCTL node setup showing yellow-green cast">
+                </div>
+                <div class="still-item">
+                    <img src="../gallery/dctl2.png" alt="Secondary cyan spike DCTL node configuration">
+                </div>
+                <div class="still-item">
+                    <img src="../gallery/dctl3.png" alt="Final inversion node completing the film simulation">
+                </div>
+                <div class="still-item">
+                    <img src="../gallery/dctl4.png" alt="Before and after comparison showing corrected color balance">
+                </div>
+            </div>
+        </div>   
+
+            <section class="blog-section">
+                <h2>Who Cares?</h2>
+                <div class="highlight-box">
+                    <p>TBH idk, I'm still testing how the overlaps in dye sensitivity affect the gamut. If you have any insights or experiences with this, I'd love to hear them!</p>
+                </div>
+            </section>
+
+     
+
+            <section class="blog-section">
+                <h2>Tools</h2>
+                <div class="tech-grid">
+                    <span class="tech-tag">DaVinci Resolve</span>
+                    <span class="tech-tag">VSCode</span>
+                    <span class="tech-tag">JP's 2499 Log</span>
+                    <span class="tech-tag">Thatcher's Dye Sim DCTL</span>
+                </div>
+            </section>
+
+          
+        </article>
+        
+            
+        <a href="../index.html" class="back-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Back to Portfolio
+        </a>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Max Boissiere. All rights reserved.</p>
+    </footer>
+
+    <script src="loading.js"></script>
+    <script src="blog-animations.js"></script>
+    <script src="../script.js"></script>
+</body>
+</html>
+
+
+

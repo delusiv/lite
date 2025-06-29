@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Max Boissiere - Director of Photography, Editor, and Director | Cinematography Portfolio</title>
+    <meta name="description" content="Max Boissiere's cinematography portfolio showcasing work as Director of Photography, Editor, and Director. View projects from Arizona Center for Youth Resources, REI, NAMI, ASU Engineering, and more.">
+    <meta name="keywords" content="cinematographer, director of photography, editor, director, film, video production, portfolio">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        // Apply saved theme immediately to prevent flash
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 
+                (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+    
+    <main role="main" aria-label="Portfolio gallery">
+        <h1 class="visually-hidden">Max Boissiere Cinematography Portfolio</h1>
+        
+        <!-- Filter Controls -->
+        <div class="filter-controls">
+            <button class="filter-toggle" id="filterToggle" data-filter="*" aria-label="Toggle filter options">
+                <span class="filter-counter">1/4</span>
+                <span class="filter-text">All Projects</span>
+            </button>
+        </div>
+        
+        <div id="gallery" class="gallery-container" role="grid" aria-label="Portfolio projects grid">
+
+            <div class="gallery-item" data-category="dp" role="gridcell">
+                <a href="projects/acyr.html" aria-label="Arizona Center for Youth Resources project">
+                    <img src="gallery/acyr1.png" alt="Arizona Center for Youth Resources documentary project still" loading="lazy">
+                    <div class="overlay">Arizona Center for Youth Resources</div>
+                </a>
+            </div>
+
+            <div class="gallery-item" data-category="editor" role="gridcell">
+                <a href="projects/rei.html" aria-label="REI Better Life Summit project">
+                    <img src="gallery/rei1.png" alt="REI Better Life Summit video project still" loading="lazy">
+                    <div class="overlay">REI Better Life Summit</div>
+                </a>
+            </div>
+
+            <div class="gallery-item" data-category="editor" role="gridcell">
+                <a href="projects/nami.html" aria-label="NAMI Faith Program project">
+                    <img src="gallery/nami1.png" alt="NAMI Faith Program video project still" loading="lazy">
+                    <div class="overlay">NAMI Faith Program</div>
+                </a>
+            </div>
+
+            <div class="gallery-item" data-category="editor" role="gridcell">
+                <a href="projects/asu.html" aria-label="ASU Space Futures Live - Online">
+                    <img src="gallery/sfl1.png" alt="ASU Space Futures Live - Online project still" loading="lazy">
+                    <div class="overlay">ASU Space Futures Live - Online</div>
+                </a>
+            </div>
+
+            <div class="gallery-item" data-category="dp" role="gridcell">
+                <a href="projects/sah.html" aria-label="Something About Him project">
+                    <img src="gallery/sah1.png" alt="Something About Him short film project still" loading="lazy">
+                    <div class="overlay">Something About Him</div>
+                </a>
+            </div>
+
+            <div class="gallery-item" data-category="dp" role="gridcell">
+                <a href="projects/goat.html" aria-label="Xefferson GOAT Alternate Reality project">
+                    <img src="gallery/goat1.png" alt="Xefferson GOAT Alternate Reality music video project still" loading="lazy">
+                    <div class="overlay">Xefferson - GOAT Alternate Reality</div>
+                </a>
+            </div>
+
+            <div class="gallery-item" data-category="director" role="gridcell">
+                <a href="projects/shitpost.html" aria-label="A Shitpost by Max Boissiere project">
+                    <img src="gallery/shitpost1.png" alt="A Shitpost by Max Boissiere comedy short project still" loading="lazy">
+                    <div class="overlay">A Shitpost by Max Boissiere</div>
+                </a>
+            </div>
+
+            <div class="gallery-item" data-category="dp" role="gridcell">
+                <a href="projects/pj.html" aria-label="PonyJam 2024 project">
+                    <img src="gallery/pj1.png" alt="PonyJam 2024 game jam event coverage project still" loading="lazy">
+                    <div class="overlay">PonyJam 2024</div>
+                </a>
+            </div>
+
+            <div class="gallery-item" data-category="dp" role="gridcell">
+                <a href="projects/chatgpt.html" aria-label="High-Key Horror project">
+                    <img src="gallery/gpt1.png" alt="High-Key Horror cinematography project still" loading="lazy">
+                    <div class="overlay">High-Key Horror</div>
+                </a>
+            </div>
+
+            <div class="gallery-item" data-category="editor" role="gridcell">
+                <a href="projects/blog-06-29-25.html" aria-label="Dye Simulator DCTL Blog project">
+                    <img src="gallery/DCTL.png" alt="Dye Simulator DCTL and 500T Film Simulation blog post" loading="lazy">
+                    <div class="overlay">Dye Simulator DCTL Blog</div>
+                </a>
+            </div>
+
+            <div class="gallery-item" data-category="dp" role="gridcell">
+                <a href="projects/granite-reef.html" aria-label="Granite Reef Recreation Area project">
+                    <img src="gallery/gra1.png" alt="Granite Reef Recreation Area cinematography project" loading="lazy">
+                    <div class="overlay">Granite Reef Recreation Area</div>
+                </a>
+            </div>
+            
+            <!-- Plus Icon for Contact Section -->
+            <div class="gallery-item gallery-plus-item" id="galleryPlusIcon" role="button" tabindex="0" aria-label="Open contact section">
+                <div class="plus-icon-container">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"/>
+                    </svg>
+                </div>
+            </div>
+            
+        </div>
+    </main>
+
+    <footer>
+        <!-- Contact Section -->
+        <div id="contactSection" class="contact-section">
+            <div class="contact-content">
+                <h2>Availability & Services</h2>
+                <div class="availability-status">
+                    <div class="status-indicator">
+                        <div class="status-dot available"></div>
+                        <span>Currently Available</span>
+                    </div>
+                </div>
+                
+                <div class="services-grid">
+                    <div class="service-category">
+                        <h3>Services</h3>
+                        <ul>
+                            <li>Director of Photography</li>
+                            <li>Camera Operation</li>
+                            <li>Video Editing</li>
+                            <li>Color Grading</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="service-category">
+                        <h3>Project Types</h3>
+                        <ul>
+                            <li>Documentaries</li>
+                            <li>Commercials</li>
+                            <li>Music Videos</li>
+                            <li>Short Films</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="service-category">
+                        <h3>Equipment</h3>
+                        <ul>
+                            <li>Sony FX6 and/or ZV-E1</li>
+                            <li>Sachtler Video 15SB</li>
+                            <li>Professional Lighting Kit</li>
+                            <li>Nikkor Vintage Lenses</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="service-category">
+                        <h3>Coverage Area</h3>
+                        <ul>
+                            <li>Arizona (Local)</li>
+                            <li>US</li>
+                            <li>FR</li>
+                            <li>EN</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="contact-cta">
+                    <p>Ready to start your project?</p>
+                    <a href="mailto:max.boissiere@picture-up.co?subject=Project Inquiry" 
+                       class="cta-button" 
+                       onclick="handleContactClick(event, 'max.boissiere@picture-up.co')">Get in Touch</a>
+                </div>
+            </div>
+        </div>
+        
+        <p>&copy; 2025 Max Boissiere. All rights reserved.</p>
+    </footer>
+
+    <script src="https://unpkg.com/shufflejs@6/dist/shuffle.min.js"></script>
+    <script src="header-loader.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
