@@ -18,6 +18,7 @@ function loadHeader() {
                         <path d="M3 7a4 4 0 0 1 4 -4h10a4 4 0 0 1 4 4v10a4 4 0 0 1 -4 4h-10a4 4 0 0 1 -4 -4z"/>
                     </svg>
                 </a>
+                <!-- Instagram section commented out
                 <a href="https://www.instagram.com/max.boissiere/" target="_blank" rel="noopener noreferrer" class="instagram-icon" aria-label="Visit Max Boissiere's Instagram profile">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-instagram">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -26,6 +27,8 @@ function loadHeader() {
                         <path d="M16.5 7.5v.01"/>
                     </svg>
                 </a>
+                -->
+                <!-- YouTube section commented out
                 <a href="https://www.youtube.com/@max.boissiere" target="_blank" rel="noopener noreferrer" class="youtube-icon" aria-label="Visit Max Boissiere's YouTube channel">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-youtube">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -33,6 +36,8 @@ function loadHeader() {
                         <path d="M10 9l5 3l-5 3z"/>
                     </svg>
                 </a>
+                -->
+                <!-- SoundCloud section commented out
                 <a href="https://soundcloud.com/quiet-4444" target="_blank" rel="noopener noreferrer" class="music-icon" aria-label="Visit Max Boissiere's SoundCloud">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-soundcloud">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -42,6 +47,7 @@ function loadHeader() {
                         <path d="M3 16l0 -2"/>
                     </svg>
                 </a>
+                -->
                 <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-sun">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
