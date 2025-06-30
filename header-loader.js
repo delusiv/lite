@@ -1,3 +1,4 @@
+/*
 // Function to load header HTML
 function loadHeader() {
     // Define the header HTML directly in JavaScript to avoid fetch issues
@@ -61,6 +62,7 @@ function loadHeader() {
         console.error('Header placeholder not found');
     }
 }
+*/
 
 // Load header when DOM is ready
-document.addEventListener('DOMContentLoaded', loadHeader);
+// document.addEventListener('DOMContentLoaded', loadHeader);
