@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -15,13 +15,27 @@
             document.documentElement.setAttribute('data-theme', savedTheme);
         })();
     </script>
-    <link rel="stylesheet" href="../style.css">
-    <script src="../header-loader.js"></script>
+    <link rel="stylesheet" href="../style-final.css">
+    <script src="../header-loader-final.js"></script>
 </head>
 <body>
     <div id="header-placeholder"></div>
     
     <main class="project-page">
+        <div class="project-nav-top">
+            <a href="../index.html" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Back
+            </a>
+            <a href="chatgpt.html" class="next-link">
+                Next
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+        </div>
         <div class="project-hero">
             <h1>Something About Him</h1>
             
@@ -83,19 +97,26 @@
             </div>
         </div>
         
-        <a href="../index.html" class="back-link">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            Back to Portfolio
-        </a>
+        <div class="project-nav">
+            <a href="../index.html" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Back
+            </a>
+            <a href="chatgpt.html" class="next-link">
+                Next
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+        </div>
     </main>
 
-    <footer>
-        <p>&copy; 2025 Max Boissiere. All rights reserved.</p>
-    </footer>
+    <div id="footer-placeholder"></div>
+    <script src="../footer-loader.js"></script>
 
-    <script src="../script.js"></script>
+    <script src="../script-final.js"></script>
 </body>
 </html>
 

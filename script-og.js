@@ -1,3 +1,4 @@
+@ -1,770 +0,0 @@
 // Max Boissiere - Cinematography Portfolio LITE VERSION
 // All JavaScript functionality consolidated into a single file
 
@@ -767,4 +768,4 @@ function preloadImages() {
     });
 }
 
-window.addEventListener('load', preloadImages);
+window.addEventListener('load', preloadImages);ed f
