@@ -33,17 +33,12 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
-      - name: Create extensionless copies
+      - name: List files (debug)
         run: |
-          # Create copies of HTML files without extensions for GitHub Pages
-          find . -name "*.html" -not -name "index.html" | while read file; do
-            dir=$(dirname "$file")
-            base=$(basename "$file" .html)
-            cp "$file" "$dir/$base"
-          done
-          # List created files
-          echo "Created extensionless files:"
-          find . -type f -not -name "*.html" -not -name "*.css" -not -name "*.js" -not -name "*.png" -not -name "*.jpg" -not -name "*.gif" -not -name "*.svg" -not -name "*.yml" -not -name ".*" | head -20
+          echo "Files in root:"
+          ls -la
+          echo "Checking .htaccess:"
+          cat .htaccess || echo "No .htaccess found"
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
