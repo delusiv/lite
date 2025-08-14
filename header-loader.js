@@ -45,6 +45,21 @@ function loadHeader() {
         // Dispatch custom event to signal header is loaded
         const headerLoadedEvent = new CustomEvent('headerLoaded');
         document.dispatchEvent(headerLoadedEvent);
+
+        // Ensure clicking the logo resets gallery filter to default on next load
+        try {
+            const logoLink = headerPlaceholder.querySelector('.logo a');
+            if (logoLink) {
+                logoLink.addEventListener('click', () => {
+                    try {
+                        // Force default state on next page render
+                        sessionStorage.setItem('forceDefaultFilterV1', '1');
+                        // Also persist default index immediately
+                        localStorage.setItem('portfolioFilterIndex', '0');
+                    } catch {}
+                }, { capture: true }); // capture to run as early as possible
+            }
+        } catch {}
     }
 }
 

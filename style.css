@@ -225,48 +225,7 @@ main{overflow-x:hidden}
     flex-shrink: 0;
 }
 
-/* Ensure consistent back-link spacing on blog pages */
-.blog-page .back-link {
-    max-width: 720px;
-    margin: 0 auto 2rem;
-    padding: 0 2rem;
-}
-
-.blog-page .project-nav,
-.blog-page .project-nav-top {
-    max-width: 720px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/* Fix vertical alignment specifically for blog navigation links */
-.blog-page .project-nav .back-link,
-.blog-page .project-nav-top .back-link,
-.blog-page .project-nav .next-link,
-.blog-page .project-nav-top .next-link {
-    margin: 0;
-    display: inline-flex;
-    align-items: center;
-    vertical-align: middle;
-    padding: 0;
-}
-
-/* Ensure hover animations work for blog navigation */
-.blog-page .project-nav .back-link:hover,
-.blog-page .project-nav-top .back-link:hover {
-    transform: translateY(0) translateX(-8px);
-    color: var(--text);
-}
-
-.blog-page .project-nav .next-link:hover,
-.blog-page .project-nav-top .next-link:hover {
-    transform: translateY(0) translateX(8px);
-    color: var(--text);
-}
+/* Removed blog-specific nav overrides to ensure consistent spacing across all pages */
 
 .blog-content{max-width:720px;margin:0 auto;padding:0 2rem;line-height:1.8;font-weight:300}
 .blog-meta{display:flex;justify-content:center;align-items:center;gap:1px;margin-top:2rem;font-size:0.8rem;opacity:0.5;text-transform:uppercase}
@@ -280,20 +239,20 @@ main{overflow-x:hidden}
     .visually-hidden{display:none !important}
     nav{padding:0 1rem}.logo a{font-size:1rem}.filter-toggle{font-size:1rem;margin-right:0.5rem}
     .project-hero{padding:0 1rem}
-    .blog-page{padding:0 1rem}
+    /* Keep same top spacing as project pages */
+    .blog-page{padding:2rem 1rem}
     h1{font-size:2rem}.project-hero h1{font-size:1.8rem}
     .videos-container{grid-template-columns:1fr;gap:1.5rem;width:100%}.project-details{grid-template-columns:1fr;gap:2rem;padding:0 1rem}
     .gallery-container{padding:0 1rem 2rem}.contact-content{padding:2rem 1.5rem}.contact-content h2{font-size:1.5rem}
     .blog-content{padding:0 1.5rem}.blog-intro{font-size:1rem;margin:4rem 0 3rem}.spec-list{grid-template-columns:1fr}
-    .blog-page .back-link{padding:0 1.5rem}
-    .blog-page .project-nav,.blog-page .project-nav-top{padding:0 1.5rem;display:flex;justify-content:space-between;align-items:center}
-    .blog-page .project-nav .back-link,.blog-page .project-nav-top .back-link,.blog-page .project-nav .next-link,.blog-page .project-nav-top .next-link{padding:0;margin:0}
+    /* Blog-specific nav spacing overrides removed for consistency */
 }
 @media (max-width: 1024px) and (min-width: 769px) {
     /* Consistent padding for all containers at tablet sizes */
     nav{padding:0 1.5rem}
     .project-hero{padding:0 1.5rem}
-    .blog-page{padding:0 1.5rem}
+    /* Keep same top spacing as project pages */
+    .blog-page{padding:2rem 1.5rem}
     .gallery-container{padding:0 1.5rem 2rem}
     .videos-container{width:50%}
 }

@@ -2,8 +2,12 @@
 (function() {
     'use strict';
     
+    // Ensure browser doesn't auto-restore on history in ways that conflict
+    try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch {}
+
     let customShuffle = null;
     let currentFilterIndex = 0;
+    let prevNonContactIndex = 0; // track last non-contact filter index
     const filterStates = [
         { filter: '*', text: 'All' },
         { filter: 'dp', text: 'Director of Photography' },
@@ -54,52 +58,32 @@
         
         if (!plusIcon || !contactSection) return;
         
-        let isOpen = false;
-        
-        const toggleContact = () => {
-            isOpen = !isOpen;
-            
-            if (isOpen) {
-                plusIcon.classList.add('active');
-                contactSection.classList.add('active');
-                plusIcon.setAttribute('aria-label', 'Close contact section');
-                
-                // Scroll to show contact section
-                setTimeout(() => {
-                    const contactContent = contactSection.querySelector('.contact-content');
-                    if (contactContent) {
-                        contactContent.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    } else {
-                        contactSection.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                }, 200);
-                
+        const toggleContactFilter = () => {
+            const currentKey = filterStates[currentFilterIndex]?.filter;
+            if (currentKey === 'contact') {
+                // Requirement: when contact is open and plus is clicked, reset to default
+                setFilterByKey('*');
             } else {
-                plusIcon.classList.remove('active');
-                contactSection.classList.remove('active');
-                plusIcon.setAttribute('aria-label', 'Open contact section');
+                // Remember current non-contact before entering contact
+                if (currentKey !== 'contact') prevNonContactIndex = currentFilterIndex;
+                setFilterByKey('contact');
             }
         };
-        
-        plusIcon.addEventListener('click', toggleContact);
+
+        plusIcon.addEventListener('click', toggleContactFilter);
         
         plusIcon.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                toggleContact();
+                toggleContactFilter();
             }
         });
         
         // Close on escape key
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && isOpen) {
-                toggleContact();
+            if (e.key === 'Escape' && filterStates[currentFilterIndex]?.filter === 'contact') {
+                const fallbackKey = filterStates[prevNonContactIndex]?.filter || '*';
+                setFilterByKey(fallbackKey);
             }
         });
     }
@@ -157,7 +141,6 @@
             const columnHeights = new Array(columns).fill(0);
             
             // Get container dimensions without padding
-            const containerRect = gallery.getBoundingClientRect();
             const containerStyle = window.getComputedStyle(gallery);
             const paddingLeft = parseFloat(containerStyle.paddingLeft) || 0;
             const paddingRight = parseFloat(containerStyle.paddingRight) || 0;
@@ -260,8 +243,49 @@
         }
     }
 
+    // Helper to update filter toggle UI consistently
+    function setFilterToggleUI(filterToggle, filterText, state) {
+        if (!filterToggle) return;
+        const filterIcon = filterToggle.querySelector('svg');
+        if (filterText) {
+            if (state.filter === '*') {
+                if (filterIcon) filterIcon.style.display = 'block';
+                filterText.style.display = 'none';
+                filterText.textContent = '';
+            } else {
+                if (filterIcon) filterIcon.style.display = 'none';
+                filterText.style.display = 'block';
+                filterText.textContent = state.text;
+            }
+        }
+        filterToggle.setAttribute('data-filter', state.filter);
+    }
+
+    // Central setter for filter state
+    function setFilterByKey(key) {
+        const idx = filterStates.findIndex(s => s.filter === key);
+        if (idx === -1) return;
+        currentFilterIndex = idx;
+        const filterToggle = document.getElementById('filterToggle');
+        const filterText = document.querySelector('.filter-text');
+        const state = filterStates[currentFilterIndex];
+        if (filterToggle) setFilterToggleUI(filterToggle, filterText, state);
+        try { localStorage.setItem('portfolioFilterIndex', String(currentFilterIndex)); } catch {}
+        applySimpleFilter(state.filter);
+    }
+
     // Filter functionality
     function restoreFilterState() {
+        // If a previous navigation requested forcing default filter, honor it and exit early
+        try {
+            const forceDefault = sessionStorage.getItem('forceDefaultFilterV1');
+            if (forceDefault === '1') {
+                sessionStorage.removeItem('forceDefaultFilterV1');
+                setFilterByKey('*');
+                return;
+            }
+        } catch {}
+
         const savedIndex = localStorage.getItem('portfolioFilterIndex');
         const filterToggle = document.getElementById('filterToggle');
         const filterText = document.querySelector('.filter-text');
@@ -274,24 +298,15 @@
                 currentFilterIndex = index;
                 const currentState = filterStates[currentFilterIndex];
                 
-                const filterIcon = filterToggle.querySelector('svg');
-                
-                if (filterText) {
-                    if (currentState.filter === '*') {
-                        if (filterIcon) filterIcon.style.display = 'block';
-                        filterText.style.display = 'none';
-                        filterText.textContent = '';
-                    } else {
-                        if (filterIcon) filterIcon.style.display = 'none';
-                        filterText.style.display = 'block';
-                        filterText.textContent = currentState.text;
-                    }
-                }
-                filterToggle.setAttribute('data-filter', currentState.filter);
+                setFilterToggleUI(filterToggle, filterText, currentState);
                 
                 // Apply filter with simple CSS Grid approach
                 applySimpleFilter(currentState.filter);
             }
+        } else {
+            // No saved state: ensure default '*' is applied to sync UI and layout
+            setFilterToggleUI(filterToggle, filterText, filterStates[0]);
+            applySimpleFilter('*');
         }
     }
     
@@ -366,19 +381,21 @@
         let filterToggle = document.getElementById('filterToggle');
         let filterText = document.querySelector('.filter-text');
         
-        // If filter elements don't exist yet, wait for header to load
-        if (!filterToggle) {
+    // If filter elements don't exist yet, wait for header to load
+    if (!filterToggle) {
             document.addEventListener('headerLoaded', () => {
                 filterToggle = document.getElementById('filterToggle');
                 filterText = document.querySelector('.filter-text');
                 if (filterToggle) {
-                    setupFilterLogic();
+            setupFilterLogic();
+            restoreFilterState();
                 }
             });
             return;
         }
         
-        setupFilterLogic();
+    setupFilterLogic();
+    restoreFilterState();
         
         function setupFilterLogic() {
             if (!gallery || !filterToggle) return;
@@ -398,27 +415,14 @@
                     console.warn('Sparks animation failed:', sparkError);
                 }
                 
+                const wasContact = filterStates[currentFilterIndex]?.filter === 'contact';
+                const prevIndex = currentFilterIndex;
                 currentFilterIndex = (currentFilterIndex + 1) % filterStates.length;
-                const currentState = filterStates[currentFilterIndex];
-                const filterIcon = filterToggle.querySelector('svg');
-                
-                if (filterText) {
-                    if (currentState.filter === '*') {
-                        if (filterIcon) filterIcon.style.display = 'block';
-                        filterText.style.display = 'none';
-                        filterText.textContent = '';
-                    } else {
-                        if (filterIcon) filterIcon.style.display = 'none';
-                        filterText.style.display = 'block';
-                        filterText.textContent = currentState.text;
-                    }
+                const newState = filterStates[currentFilterIndex];
+                if (newState.filter === 'contact' && !wasContact) {
+                    prevNonContactIndex = prevIndex;
                 }
-                
-                filterToggle.setAttribute('data-filter', currentState.filter);
-                saveFilterState();
-                
-                // Apply filter with simple CSS Grid approach
-                applySimpleFilter(currentState.filter);
+                setFilterByKey(newState.filter);
             });
         }
     }
@@ -539,6 +543,21 @@
             setTimeout(initializeGalleryFeatures, 100);
         }
     }
+
+    // Attach reset behavior to the header logo link (works whether headerLoaded fired before or after)
+    function attachLogoResetBehavior() {
+        const logoLink = document.querySelector('.logo a');
+        if (!logoLink) return;
+        if (logoLink.dataset.resetAttached === '1') return;
+        logoLink.dataset.resetAttached = '1';
+        logoLink.addEventListener('click', () => {
+            // If the current filter is contact, reset to default before navigation
+            if (filterStates[currentFilterIndex]?.filter === 'contact') {
+                try { sessionStorage.setItem('forceDefaultFilterV1', '1'); } catch {}
+                setFilterByKey('*');
+            }
+        });
+    }
     
     document.addEventListener('DOMContentLoaded', () => {
         initTheme();
@@ -546,17 +565,32 @@
         initSequentialLoading();
         initBlogAnimations();
         initProjectDetailsAnimations();
+    initLocalDevLinkFix();
+    // Install scroll preservation around arrow navigation
+    initScrollPreserver();
+    // Build and persist project order from the gallery when available
+    persistProjectOrderFromGallery();
+    // Setup dynamic prev/next arrows on project/blog pages
+    initDynamicProjectNavigation();
         initFullscreenViewer();
+        // Try to attach immediately in case header is already in DOM
+        attachLogoResetBehavior();
         
         // Initialize gallery features
         initializeGalleryFeatures();
     });
+
+    // Also attach when the header signals it has been injected
+    document.addEventListener('headerLoaded', attachLogoResetBehavior);
     
     // Lusion.co-inspired fullscreen viewer with pixel peeping
     function initFullscreenViewer() {
         const stillImages = document.querySelectorAll('.still-item img');
         
         stillImages.forEach(img => {
+            // Prevent double-initialization
+            if (img.dataset.viewerInit === '1') return;
+            img.dataset.viewerInit = '1';
             img.style.cursor = 'zoom-in';
             img.title = 'Click to view fullscreen';
             
@@ -651,9 +685,12 @@
             outline: none; appearance: none; -webkit-appearance: none;
         `;
         
-        // Slider track styling
-        const sliderStyle = document.createElement('style');
-        sliderStyle.textContent = `
+        // Slider track styling (inject once)
+        let sliderStyle = document.getElementById('zoom-slider-style');
+        if (!sliderStyle) {
+            sliderStyle = document.createElement('style');
+            sliderStyle.id = 'zoom-slider-style';
+            sliderStyle.textContent = `
             .zoom-slider::-webkit-slider-thumb {
                 appearance: none; width: 16px; height: 16px; border-radius: 50%;
                 background: white; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.3);
@@ -663,7 +700,8 @@
                 cursor: pointer; border: none; box-shadow: 0 2px 6px rgba(0,0,0,0.3);
             }
         `;
-        document.head.appendChild(sliderStyle);
+            document.head.appendChild(sliderStyle);
+        }
         zoomSlider.className = 'zoom-slider';
         
         // Slider value display
@@ -924,6 +962,198 @@
         });
     }
 
-    // Initialize fullscreen viewer
-    document.addEventListener('DOMContentLoaded', initFullscreenViewer);
+    // Append .html to extensionless internal links when running locally (Live Server)
+    function initLocalDevLinkFix() {
+        const isLocal = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+        if (!isLocal) return;
+
+        const anchors = document.querySelectorAll('a[href]');
+        anchors.forEach(a => {
+            const href = a.getAttribute('href');
+            if (!href) return;
+
+            // Skip external/anchors/mailto
+            if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:') || href.startsWith('#')) return;
+
+            // Skip root/back links and directories
+            if (href.endsWith('/')) return;
+
+            // Already has an extension
+            if (/\.[a-zA-Z0-9]+(\?|#|$)/.test(href)) return;
+
+            // Likely internal project link (e.g., projects/acyr or rei)
+            // Avoid modifying query/hash only links
+            if (!href.includes('?') && !href.includes('#')) {
+                a.setAttribute('href', href + '.html');
+            }
+        });
+    }
+
+    // (Removed duplicate DOMContentLoaded listener for initFullscreenViewer; already initialized above)
+
+    // ================================
+    // Dynamic project navigation (Prev/Next with wrap-around)
+    // ================================
+    const PROJECT_ORDER_KEY = 'projectOrderSlugsV1';
+
+    // Extract slugs from the home gallery and persist to localStorage
+    function persistProjectOrderFromGallery() {
+        try {
+            const gallery = document.getElementById('gallery');
+            if (!gallery) return;
+            const anchors = gallery.querySelectorAll('.gallery-item:not(.gallery-plus-item) a[href*="projects/"]');
+            const slugs = Array.from(anchors)
+                .map(a => {
+                    const href = a.getAttribute('href') || '';
+                    // Expect formats like "projects/rei" or "projects/rei.html"
+                    const after = href.split('projects/')[1] || '';
+                    const slug = after.replace(/\/.*/, '')  // safety: only take last segment
+                                     .replace(/\.html?(#.*|\?.*)?$/, '');
+                    return slug;
+                })
+                .filter(Boolean);
+            if (slugs.length) {
+                localStorage.setItem(PROJECT_ORDER_KEY, JSON.stringify(slugs));
+            }
+        } catch (e) {
+            // ignore
+        }
+    }
+
+    function getProjectOrder() {
+        // Try stored order first
+        try {
+            const saved = localStorage.getItem(PROJECT_ORDER_KEY);
+            if (saved) {
+                const arr = JSON.parse(saved);
+                if (Array.isArray(arr) && arr.length) return arr;
+            }
+        } catch {}
+
+        // Fallback to a reasonable default (kept in sync with index order)
+        return [
+            'acyr',
+            'rei',
+            'nami',
+            'asu',
+            'sah',
+            'goat',
+            'shitpost',
+            'pj',
+            'chatgpt',
+            'blog-06-29-25',
+            'granite-reef'
+        ];
+    }
+
+    function getCurrentProjectSlug() {
+        try {
+            // URL patterns supported: /projects/<slug> or /projects/<slug>.html
+            const parts = window.location.pathname.split('/').filter(Boolean);
+            const idx = parts.lastIndexOf('projects');
+            if (idx >= 0 && idx < parts.length - 1) {
+                const last = parts[idx + 1];
+                return last.replace(/\.html?$/, '');
+            }
+            // If running via file:// or unusual host, try last segment
+            const last = parts[parts.length - 1] || '';
+            return last.replace(/\.html?$/, '');
+        } catch {
+            return '';
+        }
+    }
+
+    function initDynamicProjectNavigation() {
+        // Only on project/blog pages under /projects/
+        if (!/\/projects\//.test(window.location.pathname)) return;
+
+        const order = getProjectOrder();
+        const slug = getCurrentProjectSlug();
+        const currentIdx = order.indexOf(slug);
+        if (currentIdx === -1 || order.length === 0) return;
+
+        const prevSlug = order[(currentIdx - 1 + order.length) % order.length];
+        const nextSlug = order[(currentIdx + 1) % order.length];
+
+        // Update top and bottom navs if present
+        const navs = document.querySelectorAll('.project-nav-top, .project-nav');
+        navs.forEach(nav => {
+            const backLink = nav.querySelector('a.back-link');
+            const nextLink = nav.querySelector('a.next-link');
+            if (backLink) backLink.setAttribute('href', prevSlug);
+            if (nextLink) nextLink.setAttribute('href', nextSlug);
+        });
+
+        // Re-run local dev link fix so .html is appended when needed
+        try { initLocalDevLinkFix(); } catch {}
+    }
+
+    // ================================
+    // Scroll preservation across page transitions
+    // ================================
+    const SCROLL_STATE_KEY = 'pendingScrollRestoreV1';
+
+    function saveScrollStateForNextPage() {
+        try {
+            const doc = document.documentElement;
+            const maxScroll = Math.max(0, (doc.scrollHeight || 0) - window.innerHeight);
+            const y = window.scrollY || window.pageYOffset || 0;
+            const ratio = maxScroll > 0 ? Math.max(0, Math.min(1, y / maxScroll)) : 0;
+            const payload = {
+                t: Date.now(),
+                y,
+                ratio,
+                viewport: { h: window.innerHeight },
+                docH: doc.scrollHeight || 0
+            };
+            sessionStorage.setItem(SCROLL_STATE_KEY, JSON.stringify(payload));
+        } catch {}
+    }
+
+    function restoreScrollStateIfAny() {
+        let raw;
+        try { raw = sessionStorage.getItem(SCROLL_STATE_KEY); } catch {}
+        if (!raw) return;
+
+        let data;
+        try { data = JSON.parse(raw); } catch { data = null; }
+        if (!data) return;
+
+        // Remove immediately to avoid re-applying on further navs
+        try { sessionStorage.removeItem(SCROLL_STATE_KEY); } catch {}
+
+        const apply = () => {
+            const doc = document.documentElement;
+            const maxScroll = Math.max(0, (doc.scrollHeight || 0) - window.innerHeight);
+            // Prefer ratio for different-length pages; fallback to absolute y
+            let target = Math.round(maxScroll * (typeof data.ratio === 'number' ? data.ratio : 0));
+            if (maxScroll > 0 && target === 0 && (data.y || 0) > 0) {
+                target = Math.min(maxScroll, data.y);
+            }
+            window.scrollTo({ top: target, left: 0, behavior: 'auto' });
+        };
+
+        // Try a few times as content loads and layout changes
+        requestAnimationFrame(apply);
+        setTimeout(apply, 100);
+        window.addEventListener('load', () => setTimeout(apply, 0), { once: true });
+    }
+
+    function initScrollPreserver() {
+        // Restore if we have a pending state
+        restoreScrollStateIfAny();
+
+        // Save on arrow clicks
+        document.addEventListener('click', (e) => {
+            const a = e.target && e.target.closest && e.target.closest('a.next-link, a.back-link');
+            if (!a) return;
+            // Same-origin navigation only
+            try {
+                const url = new URL(a.href, window.location.href);
+                if (url.origin !== window.location.origin) return;
+            } catch { return; }
+            saveScrollStateForNextPage();
+            // Don't prevent default; allow normal navigation
+        }, true);
+    }
 })();
